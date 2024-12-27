@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\php\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Peachpie.App" Version="1.1.10" />
+  </ItemGroup>
+
 </Project>
