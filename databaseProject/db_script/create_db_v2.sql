@@ -76,10 +76,15 @@ create table IN_ORDER(
     foreign key (Product_ID) references PRODUCT(Product_ID),
     foreign key (Order_ID) references ORDERS(Order_ID)
 );
+create table PUBLISH_COUPON(
+	Coupon_ID			varchar(10) not null,
+    Business_ID			varchar(20) not null,
+    primary key (Coupon_ID),
+    foreign key (Business_ID) references BUSINESS(Business_ID)
+);
 create table COUPON(
 	Coupon_ID			varchar(10) not null,
     Member_ID			varchar(10) not null,
-    Business_ID			varchar(20) not null,
     Order_ID			varchar(10),
     coupon_name			varchar(50) not null,
     time_limit			date,
@@ -87,8 +92,8 @@ create table COUPON(
     discount			double not null,
     is_used				bool default false not null,
     primary key (Coupon_ID),
+    foreign key (Coupon_ID) references PUBLISH_COUPON(Coupon_ID),
     foreign key (Member_ID) references MEMBERS(Member_ID),
-    foreign key (Business_ID) references BUSINESS(Business_ID),
     foreign key (Order_ID) references ORDERS(Order_ID)
 );
 create table RATE(
