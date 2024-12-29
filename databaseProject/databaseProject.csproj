@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\db_script\create_db_v2.sql" />
+    <None Include="wwwroot\db_script\db_insert_simple_testdata.sql" />
+    <None Include="wwwroot\db_script\drop_db.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MySql.Data" Version="9.1.0" />
+    <PackageReference Include="MySqlConnector" Version="2.4.0" />
   </ItemGroup>
 
 </Project>
