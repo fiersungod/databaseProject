@@ -1,1 +1,1 @@
-drop database taipeitechiresturant_db;
+DROP DATABASE IF EXISTS taipeitechiresturant_db;
