@@ -20,6 +20,7 @@ namespace databaseProject.Pages
             // Initialize the categories for display
             Categories = new List<Category>
             {
+            // need to add images
                 new Category
                 {
                     Name = "Fruits",
