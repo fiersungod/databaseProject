@@ -36,7 +36,7 @@ namespace databaseProject.Pages
             // This method runs when the page is first loaded
         }
 
-        public IActionResult OnPostAcc([FromBody]NewACC newACC)
+        public IActionResult OnPostCreate([FromBody]NewACC newACC)
         {
             // Basic validation for empty fields
             if (string.IsNullOrWhiteSpace(newACC.Name) || string.IsNullOrWhiteSpace(newACC.Email) || string.IsNullOrWhiteSpace(newACC.Phone) ||

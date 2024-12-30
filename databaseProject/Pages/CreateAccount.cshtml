@@ -43,10 +43,10 @@
             <label for="confirmPassword">Confirm Password:</label>
             <input type="password" id="confirmPassword" name="ConfirmPassword" placeholder="Confirm your password" required />
 
-            @if (Model.ErrorMessage != null)
-            {
-                <div style="color: red; font-size: 14px;">@Model.ErrorMessage</div>
-            }
+            @* @if (Model.ErrorMessage != null) *@
+            @* { *@
+            @*     <div style="color: red; font-size: 14px;">@Model.ErrorMessage</div> *@
+            @* } *@
 
             <button type="submit">Create Account</button>
         </form>
@@ -69,7 +69,7 @@
                 Password: password,
                 CPassword: Cpassword
             };
-            const response = await fetch("/CreateAccount?handler=Acc", {
+            const response = await fetch("/CreateAccount?handler=Create", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
