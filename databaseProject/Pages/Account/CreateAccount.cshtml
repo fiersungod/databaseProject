@@ -1,5 +1,5 @@
 @page
-@model databaseProject.Pages.Account.CreateAccountModel
+@model databaseProject.Pages.CreateAccountModel
 @{
     ViewData["Title"] = "Create Account";
 }
@@ -27,12 +27,15 @@
 <body>
     <div class="container">
         <h1>Create Account</h1>
-        <form method="post">
+        <form id="Acc">
             <label for="name">Full Name:</label>
             <input type="text" id="name" name="Name" placeholder="Enter your full name" required />
 
             <label for="email">Email:</label>
             <input type="email" id="email" name="Email" placeholder="Enter your email" required />
+
+            <label for="phone">PhoneNumber:</label>
+            <input type="text" id="phone" name="phone" placeholder="Enter your phoneNumber" required />
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="Password" placeholder="Enter your password" required />
@@ -51,5 +54,36 @@
             <a href="/Account/Login">Already have an account? Login</a>
         </div>
     </div>
+    <script>
+        document.getElementById('Acc').addEventListener('submit', async () => {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const Cpassword = document.getElementById('confirmPassword').value;
+
+            const data = {
+                Name: name,
+                Email: email,
+                Phone: phone,
+                Password: password,
+                CPassword: Cpassword
+            };
+            const response = await fetch("/Account/CreateAccount?handler=Acc", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Account created successfully! Please log in.");
+            } else {
+                location.reload();
+            }
+        });
+    </script>
 </body>
 </html>
