@@ -38,6 +38,10 @@ namespace databaseProject.Pages
 
         public IActionResult OnPostCreate([FromBody]NewACC newACC)
         {
+            if (newACC == null)
+            {
+                return BadRequest(new { success = false, message = "Received data is null" });
+            }
             // Basic validation for empty fields
             if (string.IsNullOrWhiteSpace(newACC.Name) || string.IsNullOrWhiteSpace(newACC.Email) || string.IsNullOrWhiteSpace(newACC.Phone) ||
                 string.IsNullOrWhiteSpace(newACC.Password) || string.IsNullOrWhiteSpace(newACC.CPassword))
@@ -54,18 +58,18 @@ namespace databaseProject.Pages
             }
 
             // Email Validation (regex pattern to check a valid email format)
-            if (!true)
-            {
-                ErrorMessage = "Please enter a valid email address.";
-                return Page();
-            }
+            //if (!true)
+            //{
+            //    ErrorMessage = "Please enter a valid email address.";
+            //    return Page();
+            //}
 
-            // Password Validation
-            if (!true)
-            {
-                ErrorMessage = "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.";
-                return Page();
-            }
+            //// Password Validation
+            //if (!true)
+            //{
+            //    ErrorMessage = "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.";
+            //    return Page();
+            //}
 
             using (var connection = new MySqlConnection(_connectionString))
             {
