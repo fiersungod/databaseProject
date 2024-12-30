@@ -1,9 +1,14 @@
 using databaseProject;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+    }); // Ignore Antiforgery Token for POST
 builder.Services.AddSingleton<UserService>();
 
 var app = builder.Build();

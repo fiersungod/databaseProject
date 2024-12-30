@@ -56,10 +56,6 @@
     <h3>Add New User</h3>
     <form id="AddUser">
         <div class="form-group">
-            <label for="Id">Id:</label>
-            <input type="number" id="Id" required />
-        </div>
-        <div class="form-group">
             <label for="Name">Name:</label>
             <input type="text" id="Name" required />
         </div>
@@ -71,33 +67,54 @@
     </form>
     <!-- 執行 SQL 檔案 -->
     <h3>Execute SQL File</h3>
-    <form method="post" asp-page-handler="ExecuteSql">
-        <button type="submit" class="btn btn-danger">Run SQL File</button>
-    </form>
+        <button id="runSQL">Run SQL File</button>
     <h3>Refresh read</h3>
-    <form method="post" asp-page-handler="RefreshSql">
+    <form method="get" asp-page-handler="RefreshSql">
         <button type="submit" class="btn btn-danger">Refresh</button>
     </form>
 
     <script>
-        document.getElementById('AddUser').addEventListener('submit', async function (event) {
-            event.preventDefault();
-
+        document.getElementById('AddUser').addEventListener('submit', async () => {
             const name = document.getElementById('Name').value;
             const email = document.getElementById('Email').value;
 
-            const response = await fetch('databaseTest?handler=AddUser', {
+            const data = {
+                Name: name,
+                Email: email
+            };
+            const response = await fetch("/databaseTest?handler=AddUser", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: name, email: email }),
+                body: JSON.stringify(data),
             });
 
+            const result = await response.json();
+            if (response.ok) {
+                //alert(result.message);
+                //location.reload();
+            } else {
+                alert(result.message || "上傳失敗");
+            }
+            // if (response.ok) {
+            //     location.reload();
+            // } else {
+            //     alert('Failed to add user');
+            // }
+        });
+
+        document.getElementById('runSQL').addEventListener('click', async () => {
+
+            const response = await fetch("/databaseTest?handler=ExecuteSql", {
+                method: 'GET',
+            });
+
+            const result = await response.json();
             if (response.ok) {
                 location.reload();
             } else {
-                alert('Failed to add user');
+                alert(result.message);
             }
         });
     </script>

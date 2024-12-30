@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using Mysqlx.Crud;
 
 namespace databaseProject.Pages
 {
@@ -17,7 +18,7 @@ namespace databaseProject.Pages
         private readonly IConfiguration _configuration;
         public List<User> Users { get; set; }
 
-        //[BindProperty]
+        [BindProperty]
         public User NewUser { get; set; }
 
         public databaseTestModel(UserService userService,IConfiguration configuration)
@@ -30,50 +31,25 @@ namespace databaseProject.Pages
         public void OnGet()
         {
             //OnPostExecuteSql();
-            User fuckuser = new User();
-            fuckuser.Name = "samuel";
-            fuckuser.Email = "fier.sun.god@gmail.com";
+            //User fuckuser = new User();
+            //fuckuser.Name = "samuel";
+            //fuckuser.Email = "fier.sun.god@gmail.com";
             //_userService.AddUser(fuckuser);
             Users = _userService.GetUsers();
         }
 
         // 新增資料
-        [HttpPost]
-        public async Task<IActionResult> OnPostAddUserAsync()
+        //[HttpPost]
+        public IActionResult OnPostAddUser([FromBody] User user)
         {
-            using var reader = new StreamReader(Request.Body);
-            var requestBody = await reader.ReadToEndAsync();
-
-            // 手動解析 JSON
-            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var user = JsonSerializer.Deserialize<User>(requestBody, jsonOptions);
-
             if (user != null && !string.IsNullOrEmpty(user.Name) && !string.IsNullOrEmpty(user.Email))
             {
-                await AddUserAsync(user);
+                _userService.AddUser(user);
 
-                return new JsonResult(new { message = "User added successfully", user = user })
-                {
-                    StatusCode = 200  // 指定狀態碼為 200
-                }; ;  // 返回成功狀態
+                return new JsonResult(new { success = true, message = "User added successfully" });
             }
 
-            return BadRequest();  // 若資料不正確，返回失敗狀態
-        }
-        private async Task AddUserAsync(User user)
-        {
-            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-            {
-                await connection.OpenAsync();
-
-                string query = "INSERT INTO Users (Name, Email) VALUES (@Name, @Email)";
-                using (var command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", user.Name);
-                    command.Parameters.AddWithValue("@Email", user.Email);
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            return BadRequest(new { success = false, message = "無效的資料" });  // 若資料不正確，返回失敗狀態
         }
         //public IActionResult OnPostAddUser()
         //{
@@ -88,16 +64,21 @@ namespace databaseProject.Pages
         //}
 
         // 執行 SQL 檔案
-        public IActionResult OnPostExecuteSql()
+        public IActionResult OnGetExecuteSql()
         {
             _userService.ExecuteSqlFile();
-            return RedirectToPage();
+            return new JsonResult(new { success = true });
         }
+        //public IActionResult OnPostExecuteSql()
+        //{
+        //    _userService.ExecuteSqlFile();
+        //    return RedirectToPage();
+        //}
 
         public IActionResult OnPostRefreshSql()
         {
             Users = _userService.GetUsers();
-            return RedirectToPage();
+            return new JsonResult(new { success = true, message = "User added successfully" });
         }
     }
 }

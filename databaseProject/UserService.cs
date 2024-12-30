@@ -17,17 +17,51 @@ namespace databaseProject
         // 讀取 SQL 檔案並執行
         public void ExecuteSqlFile()
         {
-            string sql = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "db_script");
+            string sql = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "db_script", "test.sql");
             string initConnect = "Server=localhost;User ID=root;Password=rebecca86;";
-//;Database=taipeitechiresturant_db
-            using (var connection = new MySqlConnection(initConnect))
+            //;Database=taipeitechiresturant_db
+            //using (var connection = new MySqlConnection(initConnect))
+            //{
+            //    connection.Open();
+            //    using (var command = new MySqlCommand(Path.Combine(sql, "test.sql"), connection))
+            //    {
+            //        command.ExecuteNonQuery();
+            //    }
+            //    connection.Close();
+            //}
+            try
             {
-                connection.Open();
-                using (var command = new MySqlCommand(Path.Combine(sql, "test.sql"), connection))
+                // 讀取 SQL 檔案內容
+                string sqlContent = File.ReadAllText(sql);
+
+                // 分割 SQL 語句 (假設每個語句以分號 ";" 結尾)
+                string[] sqlCommands = sqlContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                using (MySqlConnection connection = new MySqlConnection(initConnect))
                 {
-                    command.ExecuteNonQuery();
+                    connection.Open();
+
+                    foreach (var commandText in sqlCommands)
+                    {
+                        string trimmedCommand = commandText.Trim();
+                        if (!string.IsNullOrEmpty(trimmedCommand))
+                        {
+                            using (MySqlCommand command = new MySqlCommand(trimmedCommand, connection))
+                            {
+                                command.ExecuteNonQuery();
+                                Console.WriteLine($"執行成功: {trimmedCommand}");
+                            }
+                        }
+                    }
+
+                    connection.Close();
                 }
-                connection.Close();
+
+                Console.WriteLine("所有語句執行完成！");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"發生錯誤: {ex.Message}");
             }
         }
 
