@@ -1,0 +1,99 @@
+@page 
+@model databaseProject.Pages.ExploreModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Stores</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ff4d4d;
+            padding: 1em;
+            color: white;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 2em;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff4d4d;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Main Content -->
+    <header>
+        <h1>Explore Our Stores</h1>
+        <div>
+    @if (Model.Shops != null && Model.Shops.Count > 0)
+    {
+        foreach (var shop in Model.Shops)
+        {
+            <div>
+                <img src="/images/@shop.Image" alt="@shop.Describition" />
+                <h2>@(string.IsNullOrEmpty(shop.Location) ? "Location unavailable" : shop.Location)</h2>
+                <p>@shop.Describition</p>
+                <p>Business Hours: @shop.Business_Time</p>
+            </div>
+        }
+    }
+}
+</div>
+        <nav>
+            <ul>
+                <li><a href="/Index">Main Menu</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <ul>
+                @foreach (var shop in Model.Shops)
+                {
+                    <li>
+                        <strong>@shop.Location</strong>
+                        <p>@shop.Describition</p>
+                        <p><em>Business Hours:</em> @shop.Business_Time</p>
+                    </li>
+                }
+            </ul>
+        </section>
+
+    </main>
+
+</body>
+</html>
