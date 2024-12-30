@@ -5,11 +5,11 @@ namespace databaseProject.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
 
-        public IndexModel(IWebHostEnvironment webHostEnvironment)
+        public IndexModel(IConfiguration configuration)
         {
-            _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
         }
 
         // Property to hold the categories displayed on the home page
