@@ -25,7 +25,7 @@ create table CART(
 create table PRODUCT(
 	Product_ID			varchar(10) not null,
     Shop_ID				varchar(10) not null,
-    product_name		varchar(20) not null,
+    product_name		varchar(50) not null,
     describition		varchar(50),
     discount			double default 1 not null,
     image				varchar(50),
