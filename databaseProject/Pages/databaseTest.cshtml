@@ -39,6 +39,7 @@
     </table>
 
     <!-- 新增使用者 -->
+    <!--
     <h3>Add New User</h3>
     <form method="post" asp-page-handler="AddUser">
         <div class="form-group">
@@ -51,11 +52,54 @@
         </div>
         <button type="submit" class="btn btn-primary">Add User</button>
     </form>
-
+    -->
+    <h3>Add New User</h3>
+    <form id="AddUser">
+        <div class="form-group">
+            <label for="Id">Id:</label>
+            <input type="number" id="Id" required />
+        </div>
+        <div class="form-group">
+            <label for="Name">Name:</label>
+            <input type="text" id="Name" required />
+        </div>
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input type="email" id="Email" required />
+        </div>
+        <button type="submit">Add User</button>
+    </form>
     <!-- 執行 SQL 檔案 -->
     <h3>Execute SQL File</h3>
     <form method="post" asp-page-handler="ExecuteSql">
         <button type="submit" class="btn btn-danger">Run SQL File</button>
     </form>
+    <h3>Refresh read</h3>
+    <form method="post" asp-page-handler="RefreshSql">
+        <button type="submit" class="btn btn-danger">Refresh</button>
+    </form>
+
+    <script>
+        document.getElementById('AddUser').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById('Name').value;
+            const email = document.getElementById('Email').value;
+
+            const response = await fetch('databaseTest?handler=AddUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name, email: email }),
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to add user');
+            }
+        });
+    </script>
 </body>
 </html>

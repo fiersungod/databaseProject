@@ -27,6 +27,7 @@ namespace databaseProject
                 {
                     command.ExecuteNonQuery();
                 }
+                connection.Close();
             }
         }
 
@@ -55,6 +56,7 @@ namespace databaseProject
                         }
                     }
                 }
+                connection.Close() ;
             }
 
             return users;
@@ -74,7 +76,7 @@ namespace databaseProject
                         command.Parameters.AddWithValue("@Email", user.Email);
                         command.ExecuteNonQuery();
                     }
-                
+                connection.Close();
             }
         }
     }
