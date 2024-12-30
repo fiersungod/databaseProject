@@ -16,10 +16,10 @@ VALUES('846ef27ab','000000001'),
 ('defc8763b','000000003');
 
 INSERT INTO SHOP (Shop_ID,image,location,describition,business_time)
-VALUES('001','Onion_pancake_Shop.jpg','2F,middle','Onion pancake Shop','monday 7:30 to 19:00'),
-('002','Xuan_Fang.jpg','2F,left','Xuan Fang','monday 8:00 to 19:30'),
-('003','Sun_Cuisine.jpg','2F,left','Sun Cuisine','monday 11:00 to 19:00'),
-('004','Wenhua_Canteen.jpg','2F,left','Wenhua Canteen','monday 8:00 to 19:00');
+VALUES('001','Onion_pancake_Shop.jpg','2F,middle','Onion pancake Shop','Monday to Friday 7:30 to 19:00'),
+('002','Xuan_Fang.jpg','2F,left','Xuan Fang','Monday to Friday 8:00 to 19:30'),
+('003','Sun_Cuisine.jpg','2F,left','Sun Cuisine','Monday to Friday 11:00 to 19:00'),
+('004','Wenhua_Canteen.jpg','2F,left','Wenhua Canteen','Monday to Friday 8:00 to 19:00');
 
 INSERT INTO PRODUCT(Product_ID,Shop_ID,product_name,image,price,stock)
 VALUES('0011','001','Onion_pancake','Onion_pancake.jpg',30,75),
