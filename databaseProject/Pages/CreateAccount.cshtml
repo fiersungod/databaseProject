@@ -43,16 +43,14 @@
             <label for="confirmPassword">Confirm Password:</label>
             <input type="password" id="confirmPassword" name="ConfirmPassword" placeholder="Confirm your password" required />
 
-            <button type="submit">Create Account</button>
+            <button id="submitCreate">Create Account</button>
         </form>
         <div class="register-link">
             <a href="/Login">Already have an account? Login</a>
         </div>
     </div>
     <script>
-        document.getElementById('Create').addEventListener('submit', async () => {
-            event.preventDefault();
-
+        document.getElementById('submitCreate').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
@@ -72,7 +70,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
-            })
+            });
 
             const result = await response.json();
             if (response.ok) {

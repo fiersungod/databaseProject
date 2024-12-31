@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using databaseProject.Models;  // Add the Models namespace
 using System.Collections.Generic;
 
 namespace databaseProject.Pages
