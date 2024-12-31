@@ -117,10 +117,10 @@
         <h1>Login</h1>
         <form id="Login">
             <label for="email">Email:</label>
-            <input type="text" id="email" name="Email" placeholder="Enter your email" />
+            <input type="text" id="email" name="Email" placeholder="Enter your email" required />
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="Password" placeholder="Enter your password" />
+            <input type="password" id="password" name="Password" placeholder="Enter your password" required />
 
             <button type="submit">Login</button>
         </form>
@@ -139,7 +139,7 @@
                 Email: email,
                 Password: password
             };
-            const response = await fetch("/CreateAccount?handler=Login", {
+            const response = await fetch("/Login?handler=Login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -151,7 +151,7 @@
             if (response.ok) {
                 alert("You are login");
             } else {
-                location.reload();
+                alert("login fail");
             }
         });
     </script>

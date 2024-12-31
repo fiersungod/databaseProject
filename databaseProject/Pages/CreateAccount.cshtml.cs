@@ -42,13 +42,6 @@ namespace databaseProject.Pages
             {
                 return BadRequest(new { success = false, message = "Received data is null" });
             }
-            // Basic validation for empty fields
-            if (string.IsNullOrWhiteSpace(newACC.Name) || string.IsNullOrWhiteSpace(newACC.Email) || string.IsNullOrWhiteSpace(newACC.Phone) ||
-                string.IsNullOrWhiteSpace(newACC.Password) || string.IsNullOrWhiteSpace(newACC.CPassword))
-            {
-                ErrorMessage = "All fields are required.";
-                return BadRequest(new { success = false });
-            }
 
             // Validate that the passwords match
             if (newACC.Password != newACC.CPassword)

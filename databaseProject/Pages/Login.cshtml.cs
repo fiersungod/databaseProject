@@ -23,14 +23,8 @@ namespace databaseProject.Pages
             // This method runs when the page is first loaded
         }
 
-        public IActionResult OnPost()
+        public IActionResult OnPostLogin()
         {
-            // Basic validation example
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
-            {
-                ErrorMessage = "Please fill in both fields.";
-                return Page();
-            }
 
             // Replace this with actual authentication logic
             if (Email == "test@example.com" && Password == "password123")
