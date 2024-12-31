@@ -1,4 +1,4 @@
-@page 
+@page
 @model databaseProject.Pages.ExploreModel
 
 <!DOCTYPE html>
@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore Stores</title>
-    <link rel="stylesheet" href="/css/styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,20 +22,30 @@
             text-align: center;
         }
 
+        /* Style for the Main Menu link */
         nav ul {
             list-style-type: none;
             padding: 0;
+            margin-top: 20px; /* Add some space between the header and the navigation link */
         }
 
         nav ul li {
             display: inline;
-            margin: 0 15px;
         }
 
         nav ul li a {
             color: white;
             text-decoration: none;
             font-weight: bold;
+            font-size: 1.5em; /* Increase the font size */
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for the Main Menu link */
+        nav ul li a:hover {
+            background-color: #e60000; /* Darker red */
         }
 
         main {
@@ -46,10 +55,62 @@
         }
 
         h1 {
+            font-size: large;
             text-align: center;
             color: #ff4d4d;
         }
 
+        .shop-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px; /* Add space between the header and shop cards */
+        }
+
+        .shop-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            width: 250px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .shop-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .shop-card h3 {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .shop-card p {
+            color: #777;
+        }
+
+        .shop-card a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .shop-card a:hover {
+            background-color: #0056b3;
+        }
+
+        .no-stores {
+            font-size: 1.2em;
+            color: #ff4d4d;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -57,21 +118,6 @@
     <!-- Main Content -->
     <header>
         <h1>Explore Our Stores</h1>
-        <div>
-    @if (Model.Shops != null && Model.Shops.Count > 0)
-    {
-        foreach (var shop in Model.Shops)
-        {
-            <div>
-                <img src="/images/@shop.Image" alt="@shop.Describition" />
-                <h2>@(string.IsNullOrEmpty(shop.Location) ? "Location unavailable" : shop.Location)</h2>
-                <p>@shop.Describition</p>
-                <p>Business Hours: @shop.Business_Time</p>
-            </div>
-        }
-    }
-}
-</div>
         <nav>
             <ul>
                 <li><a href="/Member">Main Menu</a></li>
@@ -79,21 +125,32 @@
         </nav>
     </header>
 
-    <main>
-        <section>
-            <ul>
+    <div>
+        @if (Model.Shops.Count == 0)
+        {
+            <p class="no-stores">There are no stores available at the moment.</p>
+        }
+
+        @if (Model.Shops != null && Model.Shops.Count > 0)
+        {
+            <div class="shop-container">
                 @foreach (var shop in Model.Shops)
                 {
-                    <li>
-                        <strong>@shop.Location</strong>
-                        <p>@shop.Describition</p>
-                        <p><em>Business Hours:</em> @shop.Business_Time</p>
-                    </li>
+                    <div class="shop-card">
+                        <img src="~/images/@shop.Image" alt="@shop.Describition" />
+                        <h3>@shop.Describition</h3>
+                        <p>@shop.Location</p>
+                        <p><strong>Business Hours:</strong> @shop.BusinessTime</p>
+                        <a href="#">View Details</a>
+                    </div>
                 }
-            </ul>
-        </section>
-
-    </main>
+            </div>
+        }
+        else
+        {
+            <p>No shops available at the moment.</p>
+        }
+    </div>
 
 </body>
 </html>
