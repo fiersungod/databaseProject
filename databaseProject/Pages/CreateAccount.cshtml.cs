@@ -36,7 +36,6 @@ namespace databaseProject.Pages
             // This method runs when the page is first loaded
         }
 
-        [HttpPost]
         public IActionResult OnPostCreate([FromBody]NewACC newACC)
         {
             if (newACC == null)
