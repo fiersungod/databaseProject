@@ -1,8 +1,5 @@
-@page
-@model databaseProject.Pages.Account.LoginModel
-@{
-    ViewData["Title"] = "Login";
-}
+@page "/Login"
+@model databaseProject.Pages.LoginModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,20 +8,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-        .container { max-width: 400px; margin: 100px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        h1 { text-align: center; color: #333; }
-        form { display: flex; flex-direction: column; }
-        label { margin-bottom: 5px; font-weight: bold; color: #555; }
-        input[type="text"], input[type="password"] { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        button { padding: 10px; background-color: #ff6347; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #e5533c; }
-        .register-link { text-align: right; margin-top: 10px; }
-        .register-link a { color: #ff6347; text-decoration: none; font-size: 14px; }
-        .register-link a:hover { text-decoration: underline; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+        }
+
+        /* Sidebar - Static on the left */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px; /* Fixed width for the sidebar */
+            height: 100%;
+            background-color: #ff4d4d;
+            color: white;
+            padding-top: 60px;
+            z-index: 1000; /* Ensure it's in front of other content */
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            font-size: 1.2em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Page Content (Shifted to the right to avoid overlap with sidebar) */
+        .container {
+            margin-left: 260px; /* Space for the sidebar */
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff4d4d;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], input[type="password"] {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #e5533c;
+        }
+
+        .register-link {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .register-link a {
+            color: #ff4d4d;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+    <!-- Static Sidebar -->
+    <div class="sidebar">
+        <a href="/Index">Main Menu</a>
+        <a href="/Explore">Shop</a>
+        <a href="/Cart">Shopping Cart</a>
+    </div>
+
+    <!-- Page Content -->
     <div class="container">
         <h1>Login</h1>
         <form method="post">
