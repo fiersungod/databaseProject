@@ -3,14 +3,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace databaseProject.Pages
 {
+    public class CheckMem
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+    public class MemInfo
+    {
+        public string Id { get; set; }
+        public string CartId { get; set; }
+        public string MemberType { get; set; }
+    }
     public class LoginModel : PageModel
     {
-        [BindProperty]
-        public string Email { get; set; }
-
-        [BindProperty]
-        public string Password { get; set; }
-
         public string ErrorMessage { get; set; }
 
         public void OnGet()

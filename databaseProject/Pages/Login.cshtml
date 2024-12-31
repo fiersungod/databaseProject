@@ -110,14 +110,12 @@
     <!-- Static Sidebar -->
     <div class="sidebar">
         <a href="/Index">Main Menu</a>
-        <a href="/Explore">Shop</a>
-        <a href="/Cart">Shopping Cart</a>
     </div>
 
     <!-- Page Content -->
     <div class="container">
         <h1>Login</h1>
-        <form method="post">
+        <form id="Login">
             <label for="email">Email:</label>
             <input type="text" id="email" name="Email" placeholder="Enter your email" />
 
@@ -130,5 +128,32 @@
             <a href="/CreateAccount">Don't have an account? Register</a>
         </div>
     </div>
+    <script>
+        document.getElementById('Login').addEventListener('submit', async () => {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const data = {
+                Email: email,
+                Password: password
+            };
+            const response = await fetch("/CreateAccount?handler=Login", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("You are login");
+            } else {
+                location.reload();
+            }
+        });
+    </script>
 </body>
 </html>
