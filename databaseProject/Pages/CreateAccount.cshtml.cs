@@ -47,14 +47,14 @@ namespace databaseProject.Pages
                 string.IsNullOrWhiteSpace(newACC.Password) || string.IsNullOrWhiteSpace(newACC.CPassword))
             {
                 ErrorMessage = "All fields are required.";
-                return BadRequest(new { success = false });
+                return BadRequest(new { success = false, message = ErrorMessage });
             }
 
             // Validate that the passwords match
             if (newACC.Password != newACC.CPassword)
             {
                 ErrorMessage = "Passwords do not match.";
-                return BadRequest(new { success = false });
+                return BadRequest(new { success = false, message = ErrorMessage });
             }
 
             // Email Validation (regex pattern to check a valid email format)
