@@ -24,8 +24,8 @@ namespace databaseProject.Pages
     {
         //[BindProperty]
         //public NewACC NewUser { get; set; }
+
         private readonly string _connectionString;
-        public string ErrorMessage { get; set; }
 
         public CreateAccountModel(IConfiguration configuration)
         {
@@ -36,6 +36,7 @@ namespace databaseProject.Pages
             // This method runs when the page is first loaded
         }
 
+        [HttpPost]
         public IActionResult OnPostCreate([FromBody]NewACC newACC)
         {
             if (newACC == null)
@@ -46,23 +47,8 @@ namespace databaseProject.Pages
             // Validate that the passwords match
             if (newACC.Password != newACC.CPassword)
             {
-                ErrorMessage = "Passwords do not match.";
-                return BadRequest(new { success = false });
+                return BadRequest(new { success = false, message= "Passwords do not match." });
             }
-
-            // Email Validation (regex pattern to check a valid email format)
-            //if (!true)
-            //{
-            //    ErrorMessage = "Please enter a valid email address.";
-            //    return Page();
-            //}
-
-            //// Password Validation
-            //if (!true)
-            //{
-            //    ErrorMessage = "Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, one number, and one special character.";
-            //    return Page();
-            //}
 
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -81,23 +67,7 @@ namespace databaseProject.Pages
             }
 
             // If validation passes, simulate user creation and redirect to login page
-            return new JsonResult(new { success = true });
-        }
-
-        // Helper method for email validation
-        private bool IsValidEmail(string email)
-        {
-            // Simple regex to validate email format
-            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-            return emailRegex.IsMatch(email);
-        }
-
-        // Helper method for password validation
-        private bool IsValidPassword(string password)
-        {
-            // Password must have at least 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 special character
-            var passwordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
-            return passwordRegex.IsMatch(password);
+            return new JsonResult(new { success = true, message= "sign up success" });
         }
     }
 }

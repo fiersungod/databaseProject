@@ -43,11 +43,6 @@
             <label for="confirmPassword">Confirm Password:</label>
             <input type="password" id="confirmPassword" name="ConfirmPassword" placeholder="Confirm your password" required />
 
-            @* @if (Model.ErrorMessage != null) *@
-            @* { *@
-            @*     <div style="color: red; font-size: 14px;">@Model.ErrorMessage</div> *@
-            @* } *@
-
             <button type="submit">Create Account</button>
         </form>
         <div class="register-link">
@@ -81,9 +76,9 @@
 
             const result = await response.json();
             if (response.ok) {
-                alert("Account created successfully! Please log in.");
+                alert(result.message);
             } else {
-                location.reload();
+                alert(result.message);
             }
         });
     </script>
