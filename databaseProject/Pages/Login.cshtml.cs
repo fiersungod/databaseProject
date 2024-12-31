@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace databaseProject.Pages.Account
+namespace databaseProject.Pages
 {
     public class LoginModel : PageModel
     {
