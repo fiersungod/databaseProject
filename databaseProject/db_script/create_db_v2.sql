@@ -49,7 +49,7 @@ create table ADMINISTRATOR(
     foreign key (Member_ID) references MEMBERS(Member_ID)
 );
 create table IN_CART(
-	In_Cart_ID			varchar(10) not null,
+	In_Cart_ID			int auto_increment not null,
     Cart_ID				varchar(10) not null,
     Product_ID			varchar(10) not null,
     amount				int not null,

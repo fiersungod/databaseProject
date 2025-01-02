@@ -160,8 +160,21 @@
 <body>
     <!-- Sidebar Menu on the Left -->
     <div class="sidebar">
-        <a href="/Login?">Login</a>
-        <a href="/CreateAccount?">Register</a>
+        @if (databaseProject.User.MemberType == string.Empty)
+        {
+            <a href="/Login?">Login</a>
+            <a href="/CreateAccount?">Register</a>
+        }
+        @if (databaseProject.User.MemberType == "Member")
+        {
+            <a href="/Cart?">Shopping Cart</a>
+            <a href="/Explore?">Shop</a>
+        }
+        @if (databaseProject.User.MemberType == "Business")
+        {
+            <a href="/Cart?">Shopping Cart</a>
+            <a href="/Explore?">Shop</a>
+        }
     </div>
 
     <!-- Invisible Hover Area on the Left -->

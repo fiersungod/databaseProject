@@ -59,9 +59,9 @@ VALUES('0011','001','Onion_pancake','Onion_pancake.jpg',30,75),
 INSERT INTO BUSINESS (Business_ID,Shop_ID,Member_ID)
 VALUES('001','001','000000004');
 
-INSERT INTO IN_CART (In_Cart_ID,Cart_ID,Product_ID,amount)
-VALUES('8cf45a6b2','846ef27ab','0011',1),
-('ab567f07a','846ef27ab','0012',1);
+INSERT INTO IN_CART (Cart_ID,Product_ID,amount)
+VALUES('846ef27ab','0011',1),
+('846ef27ab','0012',1);
 
 INSERT INTO ORDERS (Order_ID,Member_ID,Business_ID,order_time,order_states)
 VALUES('9ea27530c','000000001','001','10:30:42','Checking');

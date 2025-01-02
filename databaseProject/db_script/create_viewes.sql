@@ -19,3 +19,7 @@ FROM ORDERS LEFT JOIN MEMBERS ON ORDERS.Member_ID = MEMBERS.Member_ID;
 CREATE VIEW Business_Product AS
 SELECT Business_ID,Product_ID,product_name,describition,image,price,stock,discount
 FROM BUSINESS RIGHT JOIN PRODUCT ON PRODUCT.Shop_ID = BUSINESS.Shop_ID;
+
+CREATE VIEW Cart_Product AS
+SELECT in_cart_id,cart_id,product_name,amount,price,price*discount*amount AS total
+FROM IN_CART LEFT JOIN PRODUCT ON IN_CART.Product_ID = PRODUCT.Product_ID;

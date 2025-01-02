@@ -53,7 +53,8 @@ namespace databaseProject.Pages
             {
                 connection.Open();
                 
-                string query = "INSERT INTO MEMBERS (Member_ID,member_type,phone_Number,member_account,member_password) VALUES (@Id,\"Member\",@Phone,@Email,@Password);";
+                string query = "INSERT INTO MEMBERS (Member_ID,member_type,phone_Number,member_account,member_password) VALUES (@Id,\"Member\",@Phone,@Email,@Password); " +
+                    "INSERT INTO CART (Cart_ID,Member_ID) VALUES(@Id,@Id);";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", newACC.Name);

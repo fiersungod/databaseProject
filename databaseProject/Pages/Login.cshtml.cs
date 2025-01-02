@@ -9,16 +9,15 @@ namespace databaseProject.Pages
         public string Email { get; set; }
         public string Password { get; set; }
     }
-    public class MemInfo
-    {
-        public string Id { get; set; }
-        public string CartId { get; set; }
-        public string MemberType { get; set; }
-    }
+    //public class MemInfo
+    //{
+    //    public string Id { get; set; }
+    //    public string CartId { get; set; }
+    //    public string MemberType { get; set; }
+    //}
     public class LoginModel : PageModel
     {
         private readonly string _connectionString;
-        public List<MemInfo> memInfo { get; set; }
         public string ErrorMessage { get; set; }
 
         public LoginModel(IConfiguration configuration)
@@ -44,21 +43,18 @@ namespace databaseProject.Pages
                     command.Parameters.AddWithValue("@Password", login.Password);
                     using (var reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (reader.Read())
                         {
-                            memInfo.Add(new MemInfo
-                            {
-                                Id = reader.GetString("Member_ID"), 
-                                CartId = reader.GetString("Cart_ID"),
-                                MemberType = reader.GetString("member_type")
-                            });
+                            databaseProject.User.UserId = reader.GetString("Member_ID");
+                            databaseProject.User.CartId = reader.GetString("Cart_ID");
+                            databaseProject.User.MemberType = reader.GetString("member_type");
                         }
                     }
                 }
                 connection.Close();
             }
 
-            if (memInfo.Count>0)
+            if (databaseProject.User.UserId!=string.Empty)
             {
                 return new JsonResult(new { success = true });
             }

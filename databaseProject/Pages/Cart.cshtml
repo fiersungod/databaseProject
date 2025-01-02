@@ -128,7 +128,7 @@
                     <table class="cart-table">
                         <thead>
                             <tr>
-                                <th>Shop</th>
+                                <th>Product</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
@@ -138,10 +138,11 @@
                             @foreach (var item in Model.CartItems)
                             {
                                 <tr>
-                                    <td>@item.Shop.Describition</td>
-      
+                                    <td>@item.Product</td>
+                                    <td>@item.Price</td>
                                     <td>@item.Quantity</td>
-                                    <td>@(item.Quantity).ToString("C")</td>
+                                    <td>@item.Total</td>
+                                    <td><button>cancel</button></td>
                                 </tr>
                             }
                         </tbody>
@@ -151,7 +152,7 @@
                 <!-- Cart Summary Section -->
                 <div class="cart-summary">
                     <h3>Cart Summary</h3>
-                    <p><strong>Total:</strong> @Model.CartTotal.ToString("C")</p>
+                    <p><strong>Total:</strong> @Model.TotalPrice.ToString("C")</p>
                     <div class="cart-actions">
                         <a href="/Explore" class="btn btn-back">Back to Explore</a>
                         <button class="btn btn-checkout">Proceed to Checkout</button>
