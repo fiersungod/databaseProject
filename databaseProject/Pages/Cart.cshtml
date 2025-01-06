@@ -20,30 +20,29 @@
             padding: 1em;
             color: white;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         main {
             padding: 2em;
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-        }
-
-        h1 {
-            text-align: center;
-            color: #ff4d4d;
+            display: flex;
+            justify-content: flex-end;
         }
 
         .cart-container {
+            width: 70%;
             display: flex;
-            justify-content: space-between;
-            padding: 20px;
+            justify-content: flex-end;
             gap: 20px;
         }
 
         .cart-table {
-            width: 60%;
+            width: 65%;
             border-collapse: collapse;
             border: 1px solid #ddd;
+            background-color: #f9f9f9;
         }
 
         .cart-table th, .cart-table td {
@@ -55,27 +54,18 @@
             background-color: #f1f1f1;
         }
 
-        .cart-table td {
-            background-color: #fafafa;
-        }
-
         .cart-summary {
             width: 30%;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #f9f9f9;
+            background-color: #fff;
         }
 
         .cart-summary h3 {
             text-align: center;
             color: #ff4d4d;
-        }
-
-        .cart-actions {
-            text-align: center;
-            margin-top: 20px;
         }
 
         .btn {
@@ -84,7 +74,6 @@
             border-radius: 5px;
             text-decoration: none;
             display: inline-block;
-            margin-top: 10px;
         }
 
         .btn-back {
@@ -110,21 +99,79 @@
             font-size: 1.2em;
             color: #ff4d4d;
         }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sidebar a:hover {
+            background-color: #f4f4f4;
+        }
+
+        body:hover .sidebar {
+            left: 0;
+        }
+
+        .hover-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 100%;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-
     <!-- Main Content -->
     <header>
         <h1>Your Cart</h1>
     </header>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        @if (databaseProject.User.MemberType == string.Empty)
+        {
+            <a href="/Login?">Login</a>
+            <a href="/CreateAccount?">Register</a>
+        }
+        @if (databaseProject.User.MemberType == "Member")
+        {
+            <a href="/Cart?">Shopping Cart</a>
+            <a href="/Explore?">Shop</a>
+            <a href="/Index">Main Menu</a>
+        }
+        @if (databaseProject.User.MemberType == "Business")
+        {
+            <a href="/Cart?">Shopping Cart</a>
+            <a href="/Explore?">Shop</a>
+            <a href="/Index">Main Menu</a>
+        }
+    </div>
 
+    <div class="hover-area"></div>
     <main>
         @if (Model.CartItems != null && Model.CartItems.Count > 0)
         {
             <div class="cart-container">
                 <!-- Cart Items Table -->
-                <div class="cart-table-container">
+                <div>
                     <table class="cart-table">
                         <thead>
                             <tr>
@@ -132,6 +179,7 @@
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -142,7 +190,12 @@
                                     <td>@item.Price</td>
                                     <td>@item.Quantity</td>
                                     <td>@item.Total</td>
-                                    <td><button>cancel</button></td>
+                                    <td>
+                                        <form method="post" asp-page-handler="Remove">
+                                            <input type="hidden" name="itemId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-back">Cancel</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -153,8 +206,7 @@
                 <div class="cart-summary">
                     <h3>Cart Summary</h3>
                     <p><strong>Total:</strong> @Model.TotalPrice.ToString("C")</p>
-                    <div class="cart-actions">
-                        <a href="/Explore" class="btn btn-back">Back to Explore</a>
+                    <div>
                         <button class="btn btn-checkout">Proceed to Checkout</button>
                     </div>
                 </div>
@@ -165,6 +217,6 @@
             <p class="empty-cart-message">Your cart is empty.</p>
         }
     </main>
-
 </body>
 </html>
+
