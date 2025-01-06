@@ -10,9 +10,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
+            transition: margin-left 0.3s ease;
         }
 
         header {
@@ -20,44 +21,20 @@
             padding: 1em;
             color: white;
             text-align: center;
-        }
-
-        /* Style for the Main Menu link */
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin-top: 20px; /* Add some space between the header and the navigation link */
-        }
-
-        nav ul li {
-            display: inline;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.5em; /* Increase the font size */
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Hover effect for the Main Menu link */
-        nav ul li a:hover {
-            background-color: #e60000; /* Darker red */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         main {
             padding: 2em;
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
         }
 
         h1 {
-            font-size: large;
+            font-size: 2.5em;
             text-align: center;
             color: #ff4d4d;
+            margin-bottom: 20px;
         }
 
         .shop-container {
@@ -65,41 +42,54 @@
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
-            margin-top: 40px; /* Add space between the header and shop cards */
+            margin-top: 20px;
         }
 
         .shop-card {
-            background-color: #f9f9f9;
-            padding: 15px;
+            background-color: #ffffff;
+            padding: 20px;
             width: 250px;
             text-align: center;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .shop-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
         }
 
         .shop-card img {
             width: 100%;
-            height: auto;
+            height: 150px;
+            object-fit: cover;
             border-radius: 8px;
         }
 
         .shop-card h3 {
-            font-size: 1.2em;
+            font-size: 1.5em;
             color: #333;
+            margin: 10px 0;
         }
 
         .shop-card p {
-            color: #777;
+            color: #555;
+            font-size: 0.9em;
+            margin: 5px 0;
         }
 
         .shop-card a {
             display: inline-block;
-            margin-top: 10px;
-            padding: 10px 20px;
+            margin-top: 15px;
+            padding: 10px 25px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            font-size: 0.9em;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
         }
 
         .shop-card a:hover {
@@ -107,25 +97,87 @@
         }
 
         .no-stores {
-            font-size: 1.2em;
+            font-size: 1.5em;
             color: #ff4d4d;
             text-align: center;
+            margin-top: 20px;
+        }
+
+        @@media (max-width: 768px) {
+            .shop-card {
+                width: 100%;
+            }
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 18px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sidebar a:hover {
+            background-color: #f4f4f4;
+        }
+
+        body:hover .sidebar {
+            left: 0;
+        }
+
+        .hover-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 100%;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <!-- Main Content -->
     <header>
         <h1>Explore Our Stores</h1>
-        <nav>
-            <ul>
-                <li><a href="/Index">Main Menu</a></li>
-            </ul>
-        </nav>
     </header>
+    
+    <div class="sidebar">
+        @if (databaseProject.User.MemberType == string.Empty)
+        {
+            <a href="/Login?">Login</a>
+            <a href="/CreateAccount?">Register</a>
+        }
+        @if (databaseProject.User.MemberType == "Member")
+        {
+            <a href="/Index">Main Menu</a>
+            <a href="/Cart">Cart</a>
+            <a href="/Explore">Shop</a>
+        }
+        @if (databaseProject.User.MemberType == "Business")
+        {
+            <a href="/Index">Main Menu</a>
+            <a href="/Cart">Shopping Cart</a>
+            <a href="/Explore">Shop</a>
+        }
+    </div>
 
-    <div>
+    <div class="hover-area"></div>
+
+
+    <main>
         @if (Model.Shops.Count == 0)
         {
             <p class="no-stores">There are no stores available at the moment.</p>
@@ -141,15 +193,21 @@
                         <h3>@shop.Describition</h3>
                         <p>@shop.Location</p>
                         <p><strong>Business Hours:</strong> @shop.Business_Time</p>
-                        <a href="#">View Details</a>
+                        <a href="/StoreDetails?shopId=@shop.Shop_ID">View Details</a>
+
                     </div>
                 }
             </div>
         }
         else
         {
-            <p>No shops available at the moment.</p>
+            <p class="no-stores">No shops available at the moment.</p>
         }
+    </main>
+
+</body>
+</html>
+
     </div>
 
 </body>
