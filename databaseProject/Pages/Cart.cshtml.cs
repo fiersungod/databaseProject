@@ -1,4 +1,5 @@
 using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 
@@ -7,24 +8,47 @@ namespace databaseProject.Pages
     public class CartModel : PageModel
     {
         private readonly string _connectionString;
-        // A list to hold the cart items
         public List<CartItem> CartItems { get; set; }
-
-        // Total price of the cart
         public int TotalPrice { get; set; }
 
         public CartModel(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+
         public void OnGet()
+        {
+            LoadCartItems();
+        }
+
+        public IActionResult OnPostRemove(string itemId)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string deleteQuery = "DELETE FROM CART_Product WHERE IN_CART_ID = @itemId;";
+                using (var command = new MySqlCommand(deleteQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@itemId", itemId);
+                    command.ExecuteNonQuery();
+                }
+
+                connection.Close();
+            }
+
+            LoadCartItems(); // Refresh the cart
+            return Page();
+        }
+
+        private void LoadCartItems()
         {
             CartItems = new List<CartItem>();
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
 
-                string query = "SELECT IN_CART_ID,product_name, amount, price, total FROM CART_Product WHERE CART_ID = @cart;";
+                string query = "SELECT IN_CART_ID, product_name, amount, price, total FROM CART_Product WHERE CART_ID = @cart;";
                 using (var command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@cart", databaseProject.User.CartId);
@@ -34,7 +58,7 @@ namespace databaseProject.Pages
                         {
                             CartItems.Add(new CartItem
                             {
-                                Id = reader.GetString("IN_CART_ID"),
+                                Id = reader.GetInt32("IN_CART_ID").ToString(),
                                 Product = reader.GetString("product_name"),
                                 Price = reader.GetInt32("price"),
                                 Quantity = reader.GetInt32("amount"),
@@ -43,13 +67,13 @@ namespace databaseProject.Pages
                         }
                     }
                 }
+
                 connection.Close();
             }
-            // Calculate the total price of the cart
+
             CalculateCartTotal();
         }
 
-        // Calculate the total price of the cart based on quantities and prices
         private void CalculateCartTotal()
         {
             TotalPrice = 0;
@@ -60,7 +84,6 @@ namespace databaseProject.Pages
         }
     }
 
-    // CartItem class to represent an item in the cart
     public class CartItem
     {
         public string Id { get; set; }
