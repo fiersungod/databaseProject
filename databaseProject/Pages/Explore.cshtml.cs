@@ -52,5 +52,17 @@ namespace databaseProject.Pages
         public string Describition { get; set; }
         public string Business_Time { get; set; }
     }
+
+    public class Product
+{
+    public string Product_ID { get; set; }
+    public string Shop_ID { get; set; }
+    public string Product_Name { get; set; }
+    public string Describition { get; set; }
+    public double Discount { get; set; }
+    public string Image { get; set; }
+    public int Price { get; set; }
+    public int Stock { get; set; }
+}
 }
 
