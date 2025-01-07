@@ -86,6 +86,8 @@
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             margin: 30px auto;
+            margin-left: 250px;
+            width: 80%;
             padding: 0 20px;
         }
 
@@ -194,17 +196,55 @@
                     <p>@product.Describition</p>
                     <p class="price">$@(product.Price * product.Discount)</p>
                     <p><strong>Stock:</strong> @product.Stock</p>
-                
-                    <form method="post" asp-page-handler="AddToCart">
-                        <input type="hidden" name="ProductId" value="@product.Product_ID" />
-                        <input type="hidden" name="ProductName" value="@product.Product_Name" />
-                        <input type="number" name="Quantity" value="1" min="1" max="@product.Stock" style="width: 60px; margin-top: 10px;" />
-                        <button type="submit" class="add-to-cart-btn">Add to Cart</button>
-                    </form>
+                    <div>
+                        <input type="hidden" class="ProductId" value="@product.Product_ID" />
+                        <input type="number" class="Quantity" value="1" min="1" max="@product.Stock" style="width: 60px; margin-top: 10px;" />
+                        <button type="submit" class="add-to-cart-btn" data-id="@product.Product_ID">Add to Cart</button>
+                    </div>
                 </div>
             }
         }
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    event.preventDefault();
+
+                    const productCard = button.closest('.product-card');
+                    const productId = productCard.querySelector('.ProductId').value;
+                    const quantity = productCard.querySelector('.Quantity').value;
+
+                    try {
+                        const response = await fetch('/StoreDetails?handler=AddToCart', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                ProductId: productId,
+                                Quantity: parseInt(quantity, 10)
+                            })
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            alert(result.message || "Product added to cart successfully!");
+                        } else {
+                            const error = await response.json();
+                            alert(error.message || "Failed to add product to cart.");
+                        }
+                    } catch (err) {
+                        console.error('Error:', err);
+                        alert("An unexpected error occurred. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 

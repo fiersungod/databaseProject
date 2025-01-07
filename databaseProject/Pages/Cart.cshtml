@@ -191,10 +191,10 @@
                                     <td>@item.Quantity</td>
                                     <td>@item.Total</td>
                                     <td>
-                                        <form method="post" asp-page-handler="Remove">
-                                            <input type="hidden" name="itemId" value="@item.Id" />
-                                            <button type="submit" class="btn btn-back">Cancel</button>
-                                        </form>
+                                        <div class="cancel">
+                                                <input type="hidden" class="itemId" value="@item.Id" />
+                                                <button type="button" class="btn btn-back" data-id="@item.Id">Cancel</button>
+                                        </div>
                                     </td>
                                 </tr>
                             }
@@ -217,6 +217,44 @@
             <p class="empty-cart-message">Your cart is empty.</p>
         }
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartButtons = document.querySelectorAll('.btn-back');
+
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    event.preventDefault();
+
+                    const productCard = button.closest('.cancel');
+                    const itemId = productCard.querySelector('.itemId').value;
+
+                    try {
+                        const response = await fetch('/Cart?handler=Remove', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                Id: itemId
+                            })
+                        });
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            alert(result.message || "Product delete successfully!");
+                            window.location.href = "/Cart?";
+                        } else {
+                            const error = await response.json();
+                            alert(error.message || "Failed to delete product from cart.");
+                        }
+                    } catch (err) {
+                        console.error('Error:', err);
+                        alert("An unexpected error occurred. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 
