@@ -10,3 +10,4 @@
   create_db_v2.sql
   create_viewes.sql
   db_insert_simple_testdata.sql
+  找到專案中的”appsettings.json”,”DBService.cs”，並且將其中的User ID 和Password 改成環境中合法的資料庫帳密。
