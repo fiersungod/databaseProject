@@ -1,0 +1,72 @@
+@page
+@model databaseProject.Pages.BusinessOrdersModel
+@{
+    ViewData["Title"] = "BusinessOrders";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+
+        .order {
+            margin-bottom: 20px;
+        }
+
+        .order h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .order-details {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Business Orders</h2>
+        @foreach (var order in Model.Orders)
+        {
+            <div class="order">
+                <h3>Order ID: @order.OrderId</h3>
+                <p>Order Time: @order.OrderTime</p>
+                <p>Order State: @order.OrderStates</p>
+                <div class="order-details">
+                    <h4>Order Details:</h4>
+                    <ul>
+                        @foreach (var item in order.InOrders)
+                        {
+                            <li>@item.ProductName - @item.Amount x @item.Price</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>
