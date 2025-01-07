@@ -27,7 +27,7 @@ namespace databaseProject.Pages
             {
                 connection.Open();
 
-                string deleteQuery = "DELETE FROM CART_Product WHERE IN_CART_ID = @itemId;";
+                string deleteQuery = "DELETE FROM IN_CART WHERE IN_CART_ID = @itemId;";
                 using (var command = new MySqlCommand(deleteQuery, connection))
                 {
                     command.Parameters.AddWithValue("@itemId", itemId);
@@ -58,7 +58,7 @@ namespace databaseProject.Pages
                         {
                             CartItems.Add(new CartItem
                             {
-                                Id = reader.GetInt32("IN_CART_ID").ToString(),
+                                Id = reader.GetString("IN_CART_ID"),
                                 Product = reader.GetString("product_name"),
                                 Price = reader.GetInt32("price"),
                                 Quantity = reader.GetInt32("amount"),

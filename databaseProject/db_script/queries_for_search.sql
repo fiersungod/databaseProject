@@ -36,9 +36,6 @@ use TaipeiTechIResturant_DB;
     FROM IN_CART
     WHERE Cart_ID = {user cart_id};
     
-    SELECT *
-    FROM CART_Product;
-    
     SELECT IN_CART_ID,product_name, amount, price, total
     FROM CART_Product
     WHERE CART_ID = {cart_id};
