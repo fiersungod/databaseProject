@@ -91,9 +91,16 @@
             background-color: #e9ecef;
         }
 
-        .thead-dark th {
+        .orders_container {
             background-color: #343a40;
-            color: #fff;
+        }
+
+        .order_card {
+            background-color: #adffad;
+        }
+
+        .order_card p{
+            text-indent: 30px;
         }
 
         .footer {
@@ -121,29 +128,19 @@
         }
         else
         {
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Order Time</th>
-                        <th>Order States</th>
-                        <th>Total Amount</th>
-                        <th>Business ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var order in Model.Orders)
-                    {
-                        <tr>
-                            <td>@order.OrderId</td>
-                            <td>@order.OrderTime</td>
-                            <td>@order.OrderStates</td>
-                            <td>@order.TotalAmount.ToString("C")</td>
-                            <td>@order.BusinessId</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <div class="orders_container">
+                @foreach (var order in Model.Orders)
+                {
+                    <div class="order_card">
+                    <h3>OrderTime: @order.OrderTime</h3>
+                    <h4>States: @order.OrderStates</h4>
+                        @foreach (var InOrder in order.InOrders)
+                        {
+                            <p>@InOrder.ProductName x @InOrder.Amount $ @InOrder.Price</p>
+                        }
+                    </div>
+                }
+            </div>
         }
     </div>
 

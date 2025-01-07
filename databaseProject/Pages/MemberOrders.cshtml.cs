@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using static databaseProject.Pages.MemberOrdersModel;
 
 namespace databaseProject.Pages
 {
@@ -22,19 +23,14 @@ namespace databaseProject.Pages
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-
+                // 抓出所有order
                 string query = @"
-                    SELECT ORDERS.Order_ID, ORDERS.order_time, ORDERS.order_states, SUM(PRODUCT.price * PRODUCT.discount * IN_ORDER.amount) AS TotalAmount, BUSINESS.Business_ID
-                    FROM ORDERS
-                    JOIN IN_ORDER ON ORDERS.Order_ID = IN_ORDER.Order_ID
-                    JOIN PRODUCT ON IN_ORDER.Product_ID = PRODUCT.Product_ID
-                    JOIN BUSINESS ON ORDERS.Business_ID = BUSINESS.Business_ID
-                    WHERE ORDERS.Member_ID = @memberId
-                    GROUP BY ORDERS.Order_ID, ORDERS.order_time, ORDERS.order_states, BUSINESS.Business_ID";
-
+                SELECT Order_ID,order_time,order_states
+                FROM ORDERS
+                WHERE Member_ID = @member_id";
                 using (var command = new MySqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@memberId", memberId);
+                    command.Parameters.AddWithValue("member_id", memberId);
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -44,15 +40,43 @@ namespace databaseProject.Pages
                                 OrderId = reader.GetString("Order_ID"),
                                 OrderTime = reader.GetTimeSpan("order_time"),
                                 OrderStates = reader.GetString("order_states"),
-                                TotalAmount = reader.GetDecimal("TotalAmount"),
-                                BusinessId = reader.GetString("Business_ID")
+                                InOrders = new List<InOrder>()
                             });
                         }
                     }
                 }
-
+                // 抓出order資訊
+                string query_2 = @"
+                SELECT product_name, amount, price
+                FROM Order_Product
+                WHERE Order_ID = @order_id";
+                foreach (var order in Orders)
+                {
+                    using (var command = new MySqlCommand(query_2, connection))
+                    {
+                        command.Parameters.AddWithValue("order_id", order.OrderId);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                order.InOrders.Add(new InOrder
+                                {
+                                    ProductName = reader.GetString("product_name"),
+                                    Amount = reader.GetInt32("amount"),
+                                    Price = reader.GetInt32("price")
+                                });
+                            }
+                        }
+                    }
+                }
                 connection.Close();
             }
+        }
+        public class InOrder
+        {
+            public string ProductName { get; set; }
+            public decimal Amount { get; set; }
+            public decimal Price { get; set; }
         }
 
         public class Order
@@ -60,8 +84,8 @@ namespace databaseProject.Pages
             public string OrderId { get; set; }
             public TimeSpan OrderTime { get; set; }
             public string OrderStates { get; set; }
-            public decimal TotalAmount { get; set; }
-            public string BusinessId { get; set; }
+            public List<InOrder> InOrders { get; set; }
         }
+
     }
 }
