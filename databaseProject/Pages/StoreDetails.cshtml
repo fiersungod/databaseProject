@@ -21,14 +21,36 @@
 
         header {
             background-color: #ff4d4d;
-            padding: 15px 0;
+            padding: 20px;
             text-align: center;
             color: white;
+            position: relative;
         }
 
         header h1 {
             font-size: 2em;
             margin: 0;
+        }
+
+        .explore-link {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: white;
+            color: #ff4d4d;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .explore-link:hover {
+            background-color: #ff4d4d;
+            color: white;
         }
 
         .store-info {
@@ -38,6 +60,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
             max-width: 800px;
+            text-align: center;
         }
 
         .store-info img {
@@ -52,13 +75,17 @@
             margin-top: 10px;
         }
 
+        h2 {
+            text-align: center;
+            margin-top: 40px;
+            color: #333;
+        }
+
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            margin-top: 30px;
-            margin-left:250px;
-            width:80%;
+            margin: 30px auto;
             padding: 0 20px;
         }
 
@@ -110,48 +137,12 @@
             font-size: 1em;
             border-radius: 6px;
             transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
         }
 
         .add-to-cart-btn:hover {
             background-color: #0056b3;
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -250px;
-            width: 250px;
-            height: 100%;
-            background-color: #ffffff;
-            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
-            transition: left 0.3s ease;
-            z-index: 1000;
-        }
-
-        .sidebar a {
-            display: block;
-            padding: 15px 20px;
-            color: #333;
-            text-decoration: none;
-            font-size: 18px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .sidebar a:hover {
-            background-color: #f4f4f4;
-        }
-
-        body:hover .sidebar {
-            left: 0;
-        }
-
-        .hover-area {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 20px;
-            height: 100%;
-            cursor: pointer;
         }
 
         /* Responsive Design */
@@ -167,11 +158,17 @@
             header h1 {
                 font-size: 1.8em;
             }
+
+            .explore-link {
+                font-size: 0.9em;
+                padding: 8px 15px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
+        <a href="/Explore" class="explore-link">← Explore</a>
         <h1>@Model.ShopDetails.Describition</h1>
     </header>
 
@@ -181,27 +178,7 @@
         <p><strong>Business Hours:</strong> @Model.ShopDetails.Business_Time</p>
     </div>
 
-    <div class="sidebar">
-        @if (databaseProject.User.MemberType == string.Empty)
-        {
-            <a href="/Login?">Login</a>
-            <a href="/CreateAccount?">Register</a>
-        }
-        @if (databaseProject.User.MemberType == "Member")
-        {
-            <a href="/Index">Main Menu</a>
-            <a href="/Cart">Cart</a>
-            <a href="/Explore">Shop</a>
-        }
-        @if (databaseProject.User.MemberType == "Business")
-        {
-            <a href="/Index">Main Menu</a>
-            <a href="/Cart">Shopping Cart</a>
-            <a href="/Explore">Shop</a>
-        }
-    </div>
-
-    <h2 style="text-align: center;">Products</h2>
+    <h2>Products</h2>
     <div class="product-grid">
         @if (Model.Products.Count == 0)
         {
@@ -218,11 +195,20 @@
                     <p class="price">$@(product.Price * product.Discount)</p>
                     <p><strong>Stock:</strong> @product.Stock</p>
                 
+<<<<<<< HEAD
                     <div>
                         <input type="hidden" class="ProductId" value="@product.Product_ID" />
                         <input type="number" class="Quantity" value="1" min="1" max="@product.Stock" style="width: 60px; margin-top: 10px;" />
                         <button type="submit" class="add-to-cart-btn" data-id="@product.Product_ID">Add to Cart</button>
                     </div>
+=======
+                    <form method="post" asp-page-handler="AddToCart">
+                        <input type="hidden" name="ProductId" value="@product.Product_ID" />
+                        <input type="hidden" name="ProductName" value="@product.Product_Name" />
+                        <input type="number" name="Quantity" value="1" min="1" max="@product.Stock" style="width: 60px; margin-top: 10px;" />
+                        <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                    </form>
+>>>>>>> 6e39dda2b7d6b22772b5f9aae743f3cde331da53
                 </div>
             }
         }
@@ -269,3 +255,4 @@
     </script>
 </body>
 </html>
+
