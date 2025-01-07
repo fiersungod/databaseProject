@@ -20,8 +20,8 @@ namespace databaseProject.Pages
         {
             LoadCartItems();
         }
-
-        public IActionResult OnPostRemove(string itemId)
+        [HttpPost]
+        public IActionResult OnPostRemove([FromBody]DleteItem item)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -30,7 +30,7 @@ namespace databaseProject.Pages
                 string deleteQuery = "DELETE FROM IN_CART WHERE IN_CART_ID = @itemId;";
                 using (var command = new MySqlCommand(deleteQuery, connection))
                 {
-                    command.Parameters.AddWithValue("@itemId", itemId);
+                    command.Parameters.AddWithValue("@itemId", item.Id);
                     command.ExecuteNonQuery();
                 }
 
@@ -38,7 +38,7 @@ namespace databaseProject.Pages
             }
 
             LoadCartItems(); // Refresh the cart
-            return Page();
+            return new JsonResult(new { success = true });
         }
 
         private void LoadCartItems()
@@ -58,7 +58,7 @@ namespace databaseProject.Pages
                         {
                             CartItems.Add(new CartItem
                             {
-                                Id = reader.GetString("IN_CART_ID"),
+                                Id = reader.GetInt32("IN_CART_ID"),
                                 Product = reader.GetString("product_name"),
                                 Price = reader.GetInt32("price"),
                                 Quantity = reader.GetInt32("amount"),
@@ -83,10 +83,13 @@ namespace databaseProject.Pages
             }
         }
     }
-
+    public class DleteItem
+    {
+        public int Id { get; set; }
+    }
     public class CartItem
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Product { get; set; }
         public int Price { get; set; }
         public int Quantity { get; set; }

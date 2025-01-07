@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace databaseProject.Pages
 {
@@ -14,7 +15,7 @@ namespace databaseProject.Pages
 
         public Shop ShopDetails { get; set; } = new Shop();
         public List<Product> Products { get; set; } = new List<Product>();
-
+        private string _shopId;
         public StoreDetailsModel(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -23,6 +24,7 @@ namespace databaseProject.Pages
         // GET method for displaying shop details and products
         public IActionResult OnGet(string shopId)
         {
+            _shopId = shopId;
             if (string.IsNullOrEmpty(shopId))
             {
                 //Console.WriteLine("No shopId provided in query string.");
@@ -85,7 +87,7 @@ namespace databaseProject.Pages
                         {
                             Products.Add(new Product
                             {
-                                Product_ID = reader["Product_ID"] as string ?? string.Empty,
+                                Product_ID = reader.GetString("Product_ID"),
                                 Product_Name = !reader.IsDBNull(reader.GetOrdinal("product_name"))
                                     ? reader.GetString("product_name")
                                     : "Unknown Product",
@@ -113,65 +115,62 @@ namespace databaseProject.Pages
         }
 
         // POST method to add product to the cart
-        public IActionResult OnPostAddToCart(string ProductId, string ProductName, int Quantity)
+        [HttpPost]
+        public IActionResult OnPostAddToCart([FromBody] AddProduct product)
         {
             // Assume user is logged in, and you have access to Member_ID in session or via authentication
-            string memberId = HttpContext.Session.GetString("Member_ID");
+            string memberId = databaseProject.User.UserId;
 
             if (string.IsNullOrEmpty(memberId))
             {
                 // If Member_ID is not found, redirect to login page (or handle as necessary)
-                return RedirectToPage("/Login");
+                return BadRequest(new { message = "Please login to add items to your cart." });
             }
-
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
-                connection.Open();
-
-                // Check if user already has a cart
-                string cartQuery = "SELECT Cart_ID FROM CART WHERE Member_ID = @MemberId;";
-                string cartId = string.Empty;
-                using (var command = new MySqlCommand(cartQuery, connection))
+                using (var connection = new MySqlConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@MemberId", memberId);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            cartId = reader.GetString("Cart_ID");
-                        }
-                    }
-                }
+                    connection.Open();
 
-                if (string.IsNullOrEmpty(cartId))
-                {
-                    // Create a new cart if one doesn't exist
-                    string insertCartQuery = "INSERT INTO CART (Member_ID) VALUES (@MemberId);";
-                    using (var command = new MySqlCommand(insertCartQuery, connection))
+                    string cartId = databaseProject.User.CartId;
+
+                    // Add product to the cart
+                    string insertCartItemQuery = "INSERT INTO IN_CART (Cart_ID, Product_ID, amount) VALUES (@CartId, @ProductId, @Quantity)";
+                    using (var command = new MySqlCommand(insertCartItemQuery, connection))
                     {
-                        command.Parameters.AddWithValue("@MemberId", memberId);
+                        command.Parameters.AddWithValue("@CartId", cartId);
+                        command.Parameters.AddWithValue("@ProductId", product.ProductId);
+                        command.Parameters.AddWithValue("@Quantity", product.Quantity);
                         command.ExecuteNonQuery();
                     }
 
-                    // Retrieve the new cart ID
-                    cartId = "new_cart_id"; // Get the new Cart_ID (or select it again)
+                    connection.Close();
                 }
 
-                // Add product to the cart
-                string insertCartItemQuery = "INSERT INTO IN_CART (Cart_ID, Product_ID, Quantity) VALUES (@CartId, @ProductId, @Quantity);";
-                using (var command = new MySqlCommand(insertCartItemQuery, connection))
-                {
-                    command.Parameters.AddWithValue("@CartId", cartId);
-                    command.Parameters.AddWithValue("@ProductId", ProductId);
-                    command.Parameters.AddWithValue("@Quantity", Quantity);
-                    command.ExecuteNonQuery();
-                }
-
-                connection.Close();
+                // Redirect back to the store details page
+                return new JsonResult(new { message = "Product added to cart successfully!" });
             }
-
-            // Redirect back to the store details page
-            return RedirectToPage("/StoreDetails", new { shopId = ProductId });
+            catch (Exception ex) 
+            {
+                return StatusCode(500, new { message = "An error occurred while adding to cart." });
+            }
         }
+    }
+    public class AddProduct
+    {
+        public string ProductId { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+    }
+    public class Product
+    {
+        public string Product_ID { get; set; }
+        public string Shop_ID { get; set; }
+        public string Product_Name { get; set; }
+        public string Describition { get; set; }
+        public double Discount { get; set; }
+        public string Image { get; set; }
+        public int Price { get; set; }
+        public int Stock { get; set; }
     }
 }
