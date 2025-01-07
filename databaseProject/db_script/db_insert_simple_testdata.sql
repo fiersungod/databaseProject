@@ -13,7 +13,8 @@ VALUES('001','000000005');
 INSERT INTO CART (Cart_ID,Member_ID)
 VALUES('846ef27ab','000000001'),
 ('1976df157','000000002'),
-('defc8763b','000000003');
+('defc8763b','000000003'),
+('3a1435926','000000004');
 
 INSERT INTO SHOP (Shop_ID,image,location,describition,business_time)
 VALUES('001','Onion_pancake_Shop.jpg','2F,middle','Onion pancake Shop','Monday to Friday 7:30 to 19:00'),
