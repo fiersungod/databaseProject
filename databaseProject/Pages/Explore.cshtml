@@ -146,6 +146,38 @@
             height: 100%;
             cursor: pointer;
         }
+                 .search-bar {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .search-bar form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .search-bar button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    .search-bar button:hover {
+        background-color: #0056b3;
+    }
     </style>
 </head>
 <body>
@@ -153,6 +185,13 @@
     <header>
         <h1>Explore Our Stores</h1>
     </header>
+
+          <div class="search-bar">
+        <form method="get" action="/Explore">
+            <input type="text" name="searchQuery" placeholder="Search for shops..." required />
+            <button type="submit">Search</button>
+        </form>
+    </div>
     
     <div class="sidebar">
         @if (databaseProject.User.MemberType == string.Empty)
@@ -172,7 +211,6 @@
             <a href="/Index">Main Menu</a>
             <a href="/Cart">Shopping Cart</a>
             <a href="/Explore">Shop</a>
-            <a href="/BusinessOrders?memberId=@databaseProject.User.UserId">Transactions</a>
         }
     </div>
 
