@@ -33,7 +33,7 @@
         h1 {
             font-size: 2.5em;
             text-align: center;
-            color: #ff4d4d;
+            color: #ffffff;
             margin-bottom: 20px;
         }
 
@@ -203,14 +203,13 @@
         {
             <a href="/Index">Main Menu</a>
             <a href="/Cart">Cart</a>
-            <a href="/Explore">Shop</a>
             <a href="/MemberOrders?memberId=@databaseProject.User.UserId">Member Orders</a>
         }
         @if (databaseProject.User.MemberType == "Business")
         {
             <a href="/Index">Main Menu</a>
             <a href="/Cart">Shopping Cart</a>
-            <a href="/Explore">Shop</a>
+            <a href="/BusinessOrders?memberId=@databaseProject.User.UserId">Transactions</a>
         }
     </div>
 
