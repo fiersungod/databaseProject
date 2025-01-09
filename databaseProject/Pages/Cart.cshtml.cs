@@ -8,7 +8,7 @@ namespace databaseProject.Pages
     public class CartModel : PageModel
     {
         private readonly string _connectionString;
-        public List<CartItem> CartItems { get; set; }
+        public List<CartItem> CartItems { get; set; } = new List<CartItem>();
         public int TotalPrice { get; set; }
 
         public CartModel(IConfiguration configuration)
@@ -43,6 +43,7 @@ namespace databaseProject.Pages
 
         public IActionResult OnGetBuy()
         {
+            LoadCartItems();
             string memberId = databaseProject.User.UserId;
             var IT = CartItems[0];
             using (var connection = new MySqlConnection(_connectionString))
@@ -83,7 +84,7 @@ namespace databaseProject.Pages
                     using (var command = new MySqlCommand(inOrderQuery, connection))
                     {
                         command.Parameters.AddWithValue("@inOrderId", orderId + i.ToString());
-                        command.Parameters.AddWithValue("@productId", item.Id);
+                        command.Parameters.AddWithValue("@productId", item.ProductId);
                         command.Parameters.AddWithValue("@orderId", orderId);
                         command.Parameters.AddWithValue("@amount", item.Quantity);
 
@@ -108,7 +109,6 @@ namespace databaseProject.Pages
 
         private void LoadCartItems()
         {
-            CartItems = new List<CartItem>();
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
