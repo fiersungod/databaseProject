@@ -154,9 +154,43 @@
             height: 100%;
             cursor: pointer; /* Show pointer cursor to indicate hoverable area */
         }
+            .search-bar {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .search-bar form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .search-bar button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    .search-bar button:hover {
+        background-color: #0056b3;
+    }
 
     </style>
 </head>
+    </div>
+
 <body>
     <!-- Sidebar Menu on the Left -->
     <div class="sidebar">
@@ -165,6 +199,7 @@
             <a href="/Explore?">Shop</a>
             <a href="/Login?">Login</a>
             <a href="/CreateAccount?">Register</a>
+            <a href="/Explore?">Shop</a>
         }
         @if (databaseProject.User.MemberType == "Member")
         {
@@ -187,13 +222,22 @@
         <h1>Welcome to Your Market</h1>
     </header>
 
+         <div class="search-bar">
+        <form method="get" action="/Explore">
+            <input type="text" name="searchQuery" placeholder="Search for shops..." required />
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
     <!-- Hero Section -->
     <div class="hero">
         <h1>Explore</h1>
         <p>Discover our wide variety of products</p>
-    </div>
+
 
 </body>
 </html>
+
+
 
 

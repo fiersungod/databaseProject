@@ -35,7 +35,7 @@
         .explore-link {
             position: absolute;
             left: 20px;
-            top: 50%;
+            top: 10%;
             transform: translateY(-50%);
             background-color: white;
             color: #ff4d4d;
@@ -91,14 +91,6 @@
             background-color: #e9ecef;
         }
 
-        .orders_container {
-            background-color: #343a40;
-        }
-
-        .order_card {
-            background-color: #adffad;
-        }
-
         .order_card p{
             text-indent: 30px;
         }
@@ -128,10 +120,10 @@
         }
         else
         {
-            <div class="orders_container">
+            <div>
                 @foreach (var order in Model.Orders)
                 {
-                    <div class="order_card">
+                    <div>
                     <h3>OrderTime: @order.OrderTime</h3>
                     <h4>States: @order.OrderStates</h4>
                         @foreach (var InOrder in order.InOrders)

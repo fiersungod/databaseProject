@@ -45,17 +45,47 @@
         .order-details {
             margin-left: 20px;
         }
+        .mainmenu-link {
+            position: absolute;
+            left: 20px;
+            top: 10%;
+            transform: translateY(-50%);
+            background-color: white;
+            color: #ff4d4d;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .mainmenu-link:hover {
+            background-color: #ff4d4d;
+            color: white;
+        }
     </style>
 </head>
 <body>
+    <header>
+    <a href="/Index" class="mainmenu-link">← Main Menu</a>
+    </header>
+
     <div class="container">
         <h2>Business Orders</h2>
         @foreach (var order in Model.Orders)
         {
             <div class="order">
-                <h3>Order ID: @order.OrderId</h3>
+                <h3>Member Id:@order.MemberId PhoneNumber = @order.PhoneNumber</h3>
                 <p>Order Time: @order.OrderTime</p>
-                <p>Order State: @order.OrderStates</p>
+                <p>Order State:
+                    <select name="state" id="StateSelect" data-order-id="@order.OrderId">
+                    <option @(order.OrderStates == "Checking" ? "selected" : "")>Checking</option>
+                    <option @(order.OrderStates == "Preparing" ? "selected" : "")>Preparing</option>
+                    <option @(order.OrderStates == "Ready" ? "selected" : "")>Ready</option>
+					</select>
+				</p>
                 <div class="order-details">
                     <h4>Order Details:</h4>
                     <ul>
@@ -65,8 +95,28 @@
                         }
                     </ul>
                 </div>
+                <h3>TotalPrice: $ @order.TotalPrice</h3>
             </div>
         }
     </div>
+    <script>
+        document.querySelectorAll('select[name="state"]').forEach(function(selectElement) {
+            selectElement.addEventListener('change', function() {
+                var selectedState = this.value;
+                var orderId = this.getAttribute('data-order-id');
+                var requestData = {
+                Order_ID: orderId,   // 傳送訂單 ID
+                value: selectedState // 傳送選擇的狀態
+            };
+                fetch("/BusinessOrders?handler=Change", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+            });
+        })
+    </script>
 </body>
 </html>

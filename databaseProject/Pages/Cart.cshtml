@@ -150,18 +150,20 @@
         {
             <a href="/Login?">Login</a>
             <a href="/CreateAccount?">Register</a>
+            <a href="/Explore?">Shop</a>
         }
         @if (databaseProject.User.MemberType == "Member")
         {
-            <a href="/Cart?">Shopping Cart</a>
-            <a href="/Explore?">Shop</a>
             <a href="/Index">Main Menu</a>
+            <a href="/Explore?">Shop</a>
+            <a href="/MemberOrders?memberId=@databaseProject.User.UserId">Member Orders</a>
         }
         @if (databaseProject.User.MemberType == "Business")
-        {
-            <a href="/Cart?">Shopping Cart</a>
-            <a href="/Explore?">Shop</a>
+        { 
             <a href="/Index">Main Menu</a>
+            <a href="/Explore?">Shop</a>
+            <a href="/BusinessOrders?memberId=@databaseProject.User.UserId">Transactions</a>
+           
         }
     </div>
 
@@ -272,4 +274,5 @@
     </script>
 </body>
 </html>
+
 

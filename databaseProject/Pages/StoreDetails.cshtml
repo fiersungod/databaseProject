@@ -28,8 +28,9 @@
         }
 
         header h1 {
-            font-size: 2em;
+            font-size: 1.8em;
             margin: 0;
+            word-wrap: break-word;
         }
 
         .explore-link {
@@ -59,8 +60,9 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
-            max-width: 800px;
+            max-width: 90%;
             text-align: center;
+            overflow: hidden;
         }
 
         .store-info img {
@@ -73,6 +75,7 @@
             font-size: 1.1em;
             line-height: 1.6;
             margin-top: 10px;
+            word-wrap: break-word;
         }
 
         h2 {
@@ -86,8 +89,7 @@
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             margin: 30px auto;
-            margin-left: 250px;
-            width: 80%;
+            width: 90%;
             padding: 0 20px;
         }
 
@@ -98,6 +100,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
         }
 
         .product-card:hover {
@@ -112,20 +115,22 @@
         }
 
         .product-card h3 {
-            font-size: 1.4em;
+            font-size: 1.2em;
             color: #333;
             margin: 10px 0;
+            word-wrap: break-word;
         }
 
         .product-card p {
-            font-size: 1.1em;
+            font-size: 0.9em;
             color: #555;
             margin: 5px 0;
+            word-wrap: break-word;
         }
 
         .price {
             color: #ff4d4d;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
         }
 
@@ -158,7 +163,7 @@
             }
 
             header h1 {
-                font-size: 1.8em;
+                font-size: 1.5em;
             }
 
             .explore-link {
@@ -166,11 +171,21 @@
                 padding: 8px 15px;
             }
         }
+
+        @@media (max-width: 480px) {
+            header {
+                padding: 15px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <a href="/Explore" class="explore-link">← Explore</a>
+        <a href="/Explore" class="explore-link">&larr; Explore</a>
         <h1>@Model.ShopDetails.Describition</h1>
     </header>
 
@@ -191,8 +206,8 @@
             @foreach (var product in Model.Products)
             {
                 <div class="product-card">
-                    <img src="~/images/@product.Image" alt="@product.Product_Name" />
-                    <h3>@product.Product_Name</h3>
+                    <img src="~/images/@product.Image" alt="@product.Product_Name.Replace("_", " ")" />
+                    <h3>@product.Product_Name.Replace("_", " ")</h3>
                     <p>@product.Describition</p>
                     <p class="price">$@(product.Price * product.Discount)</p>
                     <p><strong>Stock:</strong> @product.Stock</p>
@@ -211,7 +226,7 @@
             const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
 
             addToCartButtons.forEach(button => {
-                button.addEventListener('click', async () => {
+                button.addEventListener('click', async (event) => {
                     event.preventDefault();
 
                     const productCard = button.closest('.product-card');
