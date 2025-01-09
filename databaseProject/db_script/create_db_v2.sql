@@ -58,7 +58,7 @@ create table IN_CART(
     foreign key (Cart_ID) references CART(Cart_ID)
 );
 create table ORDERS(
-	Order_ID			varchar(10) not null,
+	Order_ID			varchar(36) not null,
     Member_ID			varchar(10) not null,
 	Business_ID			varchar(10) not null,
 	order_time			time not null,
@@ -68,9 +68,9 @@ create table ORDERS(
     foreign key (Business_ID) references BUSINESS(Business_ID)
 );
 create table IN_ORDER(
-	InOrder_ID			varchar(10) not null,
+	InOrder_ID			varchar(36) not null,
     Product_ID			varchar(10) not null,
-	Order_ID			varchar(10) not null,
+	Order_ID			varchar(36) not null,
 	amount				int not null,
     primary key (InOrder_ID),
     foreign key (Product_ID) references PRODUCT(Product_ID),
@@ -85,7 +85,7 @@ create table PUBLISH_COUPON(
 create table COUPON(
 	Coupon_ID			varchar(10) not null,
     Member_ID			varchar(10) not null,
-    Order_ID			varchar(10),
+    Order_ID			varchar(36),
     coupon_name			varchar(50) not null,
     time_limit			date,
     describition		varchar(50),

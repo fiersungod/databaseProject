@@ -41,6 +41,29 @@ namespace databaseProject.Pages
             return new JsonResult(new { success = true });
         }
 
+        [HttpPost]
+        public IActionResult OnPostBuy()
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string deleteQuery = "INSERT INTO ORDERS(Order_ID,Member_ID,Business_ID,order_time,order_states) VALUES (UUID(),@memberId,@businessId,CURRENT_TIME(),\"Checking\");";
+                using (var command = new MySqlCommand(deleteQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@memberId", databaseProject.User.UserId);
+                    command.Parameters.AddWithValue("@businessId", );
+
+                    command.ExecuteNonQuery();
+                }
+
+                connection.Close();
+            }
+
+            LoadCartItems(); // Refresh the cart
+            return new JsonResult(new { success = true });
+        }
+
         private void LoadCartItems()
         {
             CartItems = new List<CartItem>();

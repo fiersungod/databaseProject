@@ -207,7 +207,7 @@
                     <h3>Cart Summary</h3>
                     <p><strong>Total:</strong> @Model.TotalPrice.ToString("C")</p>
                     <div>
-                        <button class="btn btn-checkout">Proceed to Checkout</button>
+                        <button id="buy" class="btn btn-checkout">Proceed to Checkout</button>
                     </div>
                 </div>
             </div>
@@ -218,6 +218,21 @@
         }
     </main>
     <script>
+        document.getElementById('buy').addEventListener('click', async () => {
+            event.preventDefault();
+
+            const response = await fetch("/Cart?handler=Buy", {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                alert("Thank you to purchase");
+                window.location.href = "/Index";
+            } else {
+                alert("purchase failed");
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             const addToCartButtons = document.querySelectorAll('.btn-back');
 
