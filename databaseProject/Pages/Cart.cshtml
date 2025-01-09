@@ -224,7 +224,7 @@
             event.preventDefault();
 
             const response = await fetch("/Cart?handler=Buy", {
-                method: 'POST',
+                method: 'GET',
             });
 
             if (response.ok) {

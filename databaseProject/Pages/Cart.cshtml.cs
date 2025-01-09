@@ -41,10 +41,10 @@ namespace databaseProject.Pages
             return new JsonResult(new { success = true });
         }
 
-        [HttpPost]
-        public IActionResult OnPostBuy()
+        public IActionResult OnGetBuy()
         {
             string memberId = databaseProject.User.UserId;
+            var IT = CartItems[0];
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
@@ -52,11 +52,11 @@ namespace databaseProject.Pages
                 string q = @"
                 SELECT Business_ID
                 FROM Who_Product
-                WHERE Product_ID = @productId;";
+                WHERE Product_ID = @ProductId;";
                 var businessId = "";
                 using (var command = new MySqlCommand(q, connection))
                 {
-                    command.Parameters.AddWithValue("@ProductId", CartItems[0].ProductId);
+                    command.Parameters.AddWithValue("@ProductId", IT.ProductId);
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
